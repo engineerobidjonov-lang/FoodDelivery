@@ -17,6 +17,11 @@ const activeOrder = computed(() => {
 })
 
 const hasActiveDelivery = computed(() => Boolean(activeOrder.value))
+const deliverySteps = [
+  { key: 'preparing', label: 'Preparing' },
+  { key: 'delivering', label: 'Courier on the way' },
+  { key: 'delivered', label: 'Delivered' },
+]
 
 watch(() => route.query.orderId, (orderId) => {
   activeOrderId.value = orderId || orderStore.activeDeliveryOrderId
@@ -158,6 +163,23 @@ const backToHome = () => {
             <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Yetkazish manzili</p>
             <p class="font-bold text-slate-700 dark:text-slate-200 truncate">{{ activeOrder.address?.street }}</p>
           </div>
+        </div>
+      </div>
+
+      <div class="grid gap-3 rounded-[32px] border border-gray-100 bg-white p-4 text-left shadow-float dark:border-slate-700 dark:bg-slate-800">
+        <div
+          v-for="(step, index) in deliverySteps"
+          :key="step.key"
+          class="flex items-center gap-3 rounded-2xl p-3"
+          :class="index < 2 ? 'bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-300' : 'bg-slate-50 text-slate-400 dark:bg-slate-900 dark:text-slate-500'"
+        >
+          <span
+            class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-black"
+            :class="index < 2 ? 'bg-orange-500 text-white' : 'bg-slate-200 dark:bg-slate-700'"
+          >
+            {{ index + 1 }}
+          </span>
+          <span class="font-black">{{ step.label }}</span>
         </div>
       </div>
 

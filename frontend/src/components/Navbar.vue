@@ -16,6 +16,7 @@ const { user, isAuthenticated } = storeToRefs(authStore)
 
 const links = [
   { name: 'Home', path: '/' },
+  { name: 'Menu', path: '/menu' },
   { name: 'Saralanganlar', path: '/favorites' },
   { name: 'Buyurtmalar', path: '/orders' },
   { name: 'Manzil', path: '/location' },
@@ -36,7 +37,7 @@ const links = [
       </RouterLink>
 
       <!-- Navigation Links -->
-      <div class="order-3 flex w-full items-center gap-1 overflow-x-auto rounded-full border border-gray-100 bg-slate-50 p-1 dark:border-slate-700 dark:bg-slate-800 sm:order-none sm:w-auto sm:overflow-visible sm:gap-2">
+      <div class="hidden items-center gap-1 overflow-x-auto rounded-full border border-gray-100 bg-slate-50 p-1 dark:border-slate-700 dark:bg-slate-800 sm:flex sm:w-auto sm:overflow-visible sm:gap-2">
         <RouterLink
           v-for="link in links"
           :key="link.path"

@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '@/store/cart'
 import { useNotificationStore } from '@/store/notification'
 import { useOrderStore } from '@/store/orders'
+import Modal from '@/components/Modal.vue'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -17,10 +18,12 @@ localStorage.removeItem('user_phone')
 localStorage.removeItem('user_address')
 
 const isLoading = ref(false)
+const successOrder = ref(null)
 const formData = ref({
   name: '',
   phone: '',
   address: '',
+  comment: '',
   paymentMethod: 'cash'
 })
 const isCartEmpty = computed(() => itemCount.value === 0)
@@ -37,6 +40,12 @@ const handleSubmit = async () => {
 
   if (!formData.value.name || !formData.value.phone || !formData.value.address) {
     notificationStore.addNotification('Iltimos, barcha maydonlarni to\'ldiring', 'error')
+    return
+  }
+
+  const cleanPhone = formData.value.phone.replace(/\s/g, '')
+  if (!/^\+?998\d{9}$/.test(cleanPhone)) {
+    notificationStore.addNotification('Telefon raqamni +998 90 123 45 67 formatida kiriting', 'error')
     return
   }
 
@@ -59,6 +68,7 @@ const handleSubmit = async () => {
         address: {
           street: formData.value.address
         },
+        comment: formData.value.comment,
         paymentMethod: formData.value.paymentMethod,
         totalPrice: totalPrice.value
       }
@@ -67,13 +77,18 @@ const handleSubmit = async () => {
       
       notificationStore.addNotification('Buyurtmangiz qabul qilindi!', 'success')
       cartStore.clearCart({ silent: true })
-      router.push(`/location?status=delivering&orderId=${result.id}`)
+      successOrder.value = result
     } catch (error) {
       notificationStore.addNotification('Xatolik yuz berdi', 'error')
     } finally {
       isLoading.value = false
     }
   }, 1500)
+}
+
+const goToDelivery = () => {
+  if (!successOrder.value) return
+  router.push(`/location?status=delivering&orderId=${successOrder.value.id}`)
 }
 </script>
 
@@ -171,6 +186,19 @@ const handleSubmit = async () => {
                 </label>
               </div>
             </section>
+
+            <section>
+              <h2 class="text-xl font-black text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-3">
+                <span class="h-8 w-8 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-500 flex items-center justify-center text-sm">4</span>
+                Izoh
+              </h2>
+              <textarea
+                v-model="formData.comment"
+                placeholder="Qo‘shimcha izoh: qo‘ng‘iroq qiling, achchiq bo‘lmasin..."
+                rows="3"
+                class="w-full resize-none rounded-2xl border-2 border-transparent bg-slate-50 px-6 py-4 font-bold transition-all focus:border-orange-500 focus:bg-white focus:ring-0 dark:bg-slate-900 dark:text-slate-100 dark:focus:bg-slate-800"
+              ></textarea>
+            </section>
           </div>
         </div>
 
@@ -212,5 +240,23 @@ const handleSubmit = async () => {
         </div>
       </div>
     </div>
+
+    <Modal :open="Boolean(successOrder)" @close="goToDelivery" maxWidth="max-w-md">
+      <div class="rounded-[36px] bg-white p-8 text-center dark:bg-slate-900">
+        <div class="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-green-50 text-3xl text-green-600 dark:bg-green-900/20">
+          ✓
+        </div>
+        <h2 class="text-3xl font-black text-slate-950 dark:text-white">Buyurtma qabul qilindi</h2>
+        <p class="mt-3 text-slate-500 dark:text-slate-400">
+          Kuryer taxminan {{ successOrder?.delivery?.eta || '15 min' }} ichida yetkazadi.
+        </p>
+        <button
+          class="mt-8 w-full rounded-2xl bg-orange-500 py-4 font-black text-white shadow-lg shadow-orange-500/20 transition hover:bg-orange-600"
+          @click="goToDelivery"
+        >
+          Yetkazishni kuzatish
+        </button>
+      </div>
+    </Modal>
   </div>
 </template>

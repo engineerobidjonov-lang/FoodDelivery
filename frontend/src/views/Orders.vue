@@ -18,6 +18,7 @@ const { orders } = storeToRefs(orderStore)
 const isLoading = ref(true)
 const selectedOrder = ref(null)
 const isDetailModalOpen = ref(false)
+const orderToDelete = ref(null)
 const fallbackImage = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80'
 
 onMounted(() => {
@@ -99,7 +100,14 @@ const handleImageError = (event) => {
   }
 }
 
-const handleDeleteOrder = (order) => {
+const askDeleteOrder = (order) => {
+  orderToDelete.value = order
+}
+
+const confirmDeleteOrder = () => {
+  const order = orderToDelete.value
+  if (!order) return
+
   orderStore.deleteOrder(order.id)
 
   if (selectedOrder.value?.id === order.id) {
@@ -149,8 +157,16 @@ const handleDeleteOrder = (order) => {
         >
           <!-- Order Card Header -->
           <div class="flex flex-wrap justify-between items-start gap-6 mb-8">
-            <div class="flex gap-6 items-center">
-              <div class="h-16 w-16 rounded-3xl bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-3xl">
+            <div class="flex gap-4 items-center">
+              <div class="h-16 w-16 overflow-hidden rounded-3xl bg-orange-50 text-[0] dark:bg-orange-900/20">
+                <img
+                  v-if="order.items[0]"
+                  :src="getImage(order.items[0])"
+                  :alt="order.items[0].name"
+                  loading="lazy"
+                  @error="handleImageError"
+                  class="h-full w-full object-cover"
+                />
                 🛍️
               </div>
               <div>
@@ -204,7 +220,7 @@ const handleDeleteOrder = (order) => {
                 Batafsil
               </button>
               <button
-                @click="handleDeleteOrder(order)"
+                @click="askDeleteOrder(order)"
                 class="w-full rounded-2xl bg-red-50 px-5 py-4 font-black text-red-600 transition-all hover:bg-red-100 active:scale-95 dark:bg-red-900/20 dark:text-red-300 dark:hover:bg-red-900/30 sm:w-auto sm:px-8"
               >
                 O‘chirish
@@ -272,11 +288,35 @@ const handleDeleteOrder = (order) => {
           <span class="text-2xl">🛒</span>
         </button>
         <button
-          @click="handleDeleteOrder(selectedOrder)"
+          @click="askDeleteOrder(selectedOrder)"
           class="w-full mt-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-300 py-5 rounded-2xl font-black text-lg transition-all hover:bg-red-100 dark:hover:bg-red-900/30 active:scale-95"
         >
           O‘chirish
         </button>
+      </div>
+    </Modal>
+
+    <Modal :open="Boolean(orderToDelete)" @close="orderToDelete = null" maxWidth="max-w-md">
+      <div class="rounded-[32px] bg-white p-8 text-center dark:bg-slate-900">
+        <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-2xl font-black text-red-500 dark:bg-red-900/20">
+          !
+        </div>
+        <h2 class="text-2xl font-black text-slate-950 dark:text-white">Buyurtmani o‘chirasizmi?</h2>
+        <p class="mt-2 text-slate-500 dark:text-slate-400">Bu order tarixdan butunlay olib tashlanadi.</p>
+        <div class="mt-8 grid gap-3 sm:grid-cols-2">
+          <button
+            class="rounded-2xl bg-slate-100 px-5 py-4 font-black text-slate-700 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+            @click="orderToDelete = null"
+          >
+            Bekor qilish
+          </button>
+          <button
+            class="rounded-2xl bg-red-500 px-5 py-4 font-black text-white transition hover:bg-red-600"
+            @click="confirmDeleteOrder(); orderToDelete = null"
+          >
+            O‘chirish
+          </button>
+        </div>
       </div>
     </Modal>
   </div>

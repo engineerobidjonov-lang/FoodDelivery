@@ -1,7 +1,7 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useCartStore } from '@/store/cart'
 import { useNotificationStore } from '@/store/notification'
 import CartItem from '@/components/CartItem.vue'
@@ -13,6 +13,8 @@ const { items, totalPrice, itemCount } = storeToRefs(cartStore)
 
 const isLoading = ref(false)
 const errorMessage = ref('')
+const deliveryFee = computed(() => itemCount.value > 0 ? 0 : 0)
+const grandTotal = computed(() => totalPrice.value + deliveryFee.value)
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " so'm"
@@ -57,25 +59,29 @@ const checkout = async () => {
             <h2 class="text-2xl font-black text-gray-900 mb-6 dark:text-slate-100">Jami</h2>
             
             <div class="space-y-4 mb-8">
-              <div class="flex justify-between text-gray-500 font-medium">
+              <div class="flex justify-between text-gray-500 font-medium dark:text-slate-400">
                 <span>Taomlar soni:</span>
                 <span>{{ itemCount }} ta</span>
               </div>
-              <div class="flex justify-between text-gray-500 font-medium">
+              <div class="flex justify-between text-gray-500 font-medium dark:text-slate-400">
+                <span>Subtotal:</span>
+                <span>{{ formatPrice(totalPrice) }}</span>
+              </div>
+              <div class="flex justify-between text-gray-500 font-medium dark:text-slate-400">
                 <span>Yetkazib berish:</span>
                 <span class="text-green-500 font-bold">Bepul</span>
               </div>
               <div class="h-px bg-gray-100 my-4 dark:bg-slate-700"></div>
               <div class="flex justify-between items-end">
                 <span class="text-lg font-bold text-gray-900 dark:text-slate-100">Umumiy:</span>
-                <span class="text-2xl font-black text-orange-500">{{ formatPrice(totalPrice) }}</span>
+                <span class="text-2xl font-black text-orange-500">{{ formatPrice(grandTotal) }}</span>
               </div>
             </div>
 
             <button 
               @click="checkout"
               :disabled="isLoading"
-              class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-lg shadow-lg hover:bg-orange-500 transition-all active:scale-95 disabled:bg-gray-400 flex items-center justify-center gap-3"
+              class="hidden w-full items-center justify-center gap-3 rounded-2xl bg-slate-900 py-5 text-lg font-black text-white shadow-lg transition-all hover:bg-orange-500 active:scale-95 disabled:bg-gray-400 dark:bg-orange-600 sm:flex"
             >
               <span v-if="isLoading" class="animate-spin text-xl">⏳</span>
               {{ isLoading ? 'Yuborilmoqda...' : 'Buyurtma berish' }}
@@ -97,10 +103,20 @@ const checkout = async () => {
         <div class="text-8xl mb-6">🛒</div>
         <h2 class="text-3xl font-black text-gray-900">Savat bo‘sh</h2>
         <p class="text-gray-500 mt-3 max-w-sm mx-auto">Siz hali birorta ham taom tanlamadingiz. Home pagega o‘tib, mazali taomlar tanlang!</p>
-        <RouterLink to="/" class="inline-block mt-8 bg-orange-500 text-white px-10 py-4 rounded-2xl font-black text-lg hover:bg-orange-600 transition-all shadow-lg active:scale-95">
+        <RouterLink to="/menu" class="inline-block mt-8 bg-orange-500 text-white px-10 py-4 rounded-2xl font-black text-lg hover:bg-orange-600 transition-all shadow-lg active:scale-95">
           Taom tanlash
         </RouterLink>
       </div>
+    </div>
+
+    <div v-if="items.length > 0" class="fixed inset-x-0 bottom-[92px] z-40 px-4 sm:hidden">
+      <button
+        @click="checkout"
+        class="flex w-full items-center justify-between rounded-[24px] bg-slate-950 px-5 py-4 font-black text-white shadow-2xl shadow-slate-900/20 dark:bg-orange-600"
+      >
+        <span>Buyurtma berish</span>
+        <span>{{ formatPrice(grandTotal) }}</span>
+      </button>
     </div>
   </div>
 </template>

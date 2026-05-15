@@ -39,26 +39,29 @@ const closeDetails = () => {
 
 const handleAddToCart = () => {
   cartStore.addToCart(props.item)
-  // Toast xabarini keyingi stepda qo'shamiz
 }
 </script>
 
 <template>
-  <div>
+  <div class="h-full">
     <!-- Card Wrapper -->
     <div 
       @click="openDetails"
-      class="group relative flex flex-col overflow-hidden rounded-[32px] bg-white dark:bg-slate-800 shadow-float transition-all hover:-translate-y-1 hover:shadow-2xl cursor-pointer border border-gray-100 dark:border-slate-700"
+      class="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-800"
     >
       <!-- Image Section -->
-      <div class="relative h-56 w-full overflow-hidden">
+      <div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-100 dark:bg-slate-700">
         <img 
           :src="getImage(item)" 
           :alt="item.name" 
+          loading="lazy"
           @error="handleImageError"
           class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" 
         />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-80"></div>
+        <span class="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-slate-700 shadow-sm backdrop-blur dark:bg-slate-900/85 dark:text-slate-200">
+          {{ item.category }}
+        </span>
         
         <!-- Like Button -->
         <button 
@@ -72,24 +75,24 @@ const handleAddToCart = () => {
       </div>
 
       <!-- Content Section -->
-      <div class="flex flex-1 flex-col p-6">
+      <div class="flex flex-1 flex-col p-5">
         <div class="mb-2 flex items-start justify-between">
-          <h3 class="text-lg font-black text-slate-900 dark:text-slate-100 line-clamp-1">{{ item.name }}</h3>
+          <h3 class="text-lg font-black leading-tight text-slate-900 line-clamp-1 dark:text-slate-100">{{ item.name }}</h3>
         </div>
         
-        <p class="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-2">
+        <p class="mb-5 flex-1 text-sm leading-6 text-slate-500 line-clamp-2 dark:text-slate-400">
           {{ item.description }}
         </p>
 
-        <div class="flex items-center justify-between mt-auto">
+        <div class="mt-auto flex items-center justify-between gap-3">
           <div class="flex flex-col">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Narxi</span>
-            <span class="text-lg font-black text-orange-500">{{ formatPrice(item.price) }}</span>
+            <span class="text-[11px] font-black uppercase tracking-wider text-slate-400">Narxi</span>
+            <span class="text-lg font-black text-slate-950 dark:text-white">{{ formatPrice(item.price) }}</span>
           </div>
           
           <button 
             @click.stop="handleAddToCart"
-            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 dark:bg-orange-500 text-white shadow-lg transition-all hover:bg-orange-500 hover:rotate-6 active:scale-90"
+            class="flex h-12 shrink-0 items-center justify-center rounded-2xl bg-orange-500 px-4 text-sm font-black text-white shadow-lg shadow-orange-500/20 transition-all hover:bg-slate-900 active:scale-95 dark:hover:bg-orange-600"
           >
             <span class="text-xl">🛒</span>
           </button>
@@ -102,7 +105,7 @@ const handleAddToCart = () => {
       <div class="flex flex-col md:flex-row h-full bg-white dark:bg-slate-900 overflow-hidden rounded-[32px]">
         <!-- Modal Image -->
         <div class="h-64 md:h-auto md:w-1/2 overflow-hidden">
-          <img :src="getImage(item)" :alt="item.name" @error="handleImageError" class="h-full w-full object-cover" />
+          <img :src="getImage(item)" :alt="item.name" loading="lazy" @error="handleImageError" class="h-full w-full object-cover" />
         </div>
         
         <!-- Modal Details -->

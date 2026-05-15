@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { RouterView, RouterLink } from 'vue-router'
 import Navbar from './components/Navbar.vue'
+import BottomNav from './components/BottomNav.vue'
 import CartDrawer from './components/CartDrawer.vue'
 import ToastContainer from './components/ToastContainer.vue'
 import { useUiStore } from '@/store/ui'
@@ -38,6 +39,7 @@ const getCategoryIcon = (name) => {
 <template>
   <div class="min-h-screen overflow-x-hidden bg-white dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300">
     <Navbar />
+    <BottomNav />
 
     <!-- Cart Drawer -->
     <CartDrawer />
@@ -107,7 +109,7 @@ const getCategoryIcon = (name) => {
       </div>
     </aside>
 
-    <main class="mx-auto w-full max-w-7xl px-3 pb-12 pt-6 sm:px-6 lg:px-8">
+    <main class="mx-auto w-full max-w-7xl px-3 pb-28 pt-6 sm:px-6 sm:pb-12 lg:px-8">
       <RouterView />
     </main>
   </div>

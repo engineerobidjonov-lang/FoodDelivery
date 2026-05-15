@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Category from '@/views/Category.vue'
 import Cart from '@/views/Cart.vue'
+import Menu from '@/views/Menu.vue'
 import Location from '@/views/Location.vue'
 import Favorites from '@/views/Favorites.vue'
 import Checkout from '@/views/Checkout.vue'
@@ -15,6 +16,8 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: Home },
+    { path: '/menu', name: 'menu', component: Menu },
+    { path: '/menu/:category', name: 'menu-category', component: Menu, props: true },
     { path: '/category/:name', name: 'category', component: Category, props: true },
     { path: '/cart', name: 'cart', component: Cart },
     { path: '/checkout', name: 'checkout', component: Checkout, meta: { requiresAuth: true } },
