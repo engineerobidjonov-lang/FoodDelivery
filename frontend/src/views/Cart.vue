@@ -14,7 +14,10 @@ const { items, totalPrice, itemCount } = storeToRefs(cartStore)
 const isLoading = ref(false)
 const errorMessage = ref('')
 const deliveryFee = computed(() => itemCount.value > 0 ? 0 : 0)
-const grandTotal = computed(() => totalPrice.value + deliveryFee.value)
+const promoCode = ref('')
+const tax = computed(() => itemCount.value > 0 ? Math.round(totalPrice.value * 0.02) : 0)
+const discount = computed(() => promoCode.value.trim().toUpperCase() === 'FOODDASH' ? Math.round(totalPrice.value * 0.1) : 0)
+const grandTotal = computed(() => Math.max(0, totalPrice.value + deliveryFee.value + tax.value - discount.value))
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " so'm"
@@ -70,6 +73,23 @@ const checkout = async () => {
               <div class="flex justify-between text-gray-500 font-medium dark:text-slate-400">
                 <span>Yetkazib berish:</span>
                 <span class="text-green-500 font-bold">Bepul</span>
+              </div>
+              <div class="flex justify-between text-gray-500 font-medium dark:text-slate-400">
+                <span>Service tax:</span>
+                <span>{{ formatPrice(tax) }}</span>
+              </div>
+              <div v-if="discount" class="flex justify-between text-green-500 font-bold">
+                <span>Promo chegirma:</span>
+                <span>-{{ formatPrice(discount) }}</span>
+              </div>
+              <div class="rounded-2xl bg-slate-50 p-3 dark:bg-slate-900">
+                <label class="mb-2 block text-xs font-black uppercase tracking-wider text-slate-400">Promo code</label>
+                <input
+                  v-model="promoCode"
+                  type="text"
+                  placeholder="FOODDASH"
+                  class="h-11 w-full rounded-xl border border-transparent bg-white px-4 text-sm font-bold text-slate-900 outline-none transition focus:border-orange-500 dark:bg-slate-800 dark:text-white"
+                />
               </div>
               <div class="h-px bg-gray-100 my-4 dark:bg-slate-700"></div>
               <div class="flex justify-between items-end">

@@ -82,6 +82,36 @@ const adminJs = new AdminJS({
   componentLoader,
   dashboard: {
     component: Components.Dashboard,
+    handler: async () => {
+      const Food = mongoose.models.Food
+      const Order = mongoose.models.Order
+
+      const [totalFoods, totalOrders, orders, foods] = await Promise.all([
+        Food?.countDocuments({}) || 0,
+        Order?.countDocuments({}) || 0,
+        Order?.find({}).sort({ createdAt: -1 }).limit(5).lean() || [],
+        Food?.find({}).sort({ createdAt: -1 }).limit(5).lean() || [],
+      ])
+
+      const revenue = orders.reduce((sum, order) => sum + (order.totalPrice || 0), 0)
+
+      return {
+        totalFoods,
+        totalOrders,
+        revenue,
+        popularFoods: foods.map((food) => ({
+          name: food.name,
+          price: food.price,
+          available: food.available,
+        })),
+        latestOrders: orders.map((order) => ({
+          id: String(order._id).slice(-6).toUpperCase(),
+          status: order.status,
+          totalPrice: order.totalPrice,
+          createdAt: order.createdAt,
+        })),
+      }
+    },
   },
   branding: {
     companyName: 'Food Dash Admin',

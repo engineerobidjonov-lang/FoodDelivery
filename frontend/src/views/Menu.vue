@@ -11,6 +11,9 @@ const { categories, foods, loading, error, reload } = useMenuData()
 
 const search = ref(route.query.search ? String(route.query.search) : '')
 const sort = ref('popular')
+const maxPrice = ref(300000)
+const topRatedOnly = ref(false)
+const fastDeliveryOnly = ref(false)
 
 const activeCategory = computed(() => route.params.category ? String(route.params.category) : 'all')
 
@@ -42,21 +45,29 @@ const filteredFoods = computed(() => {
 
   const result = foods.value.filter((item) => {
     const matchesCategory = category === 'all' || item.category.toLowerCase() === category
+    const matchesPrice = item.price <= maxPrice.value
+    const matchesTopRated = !topRatedOnly.value || true
+    const matchesFastDelivery = !fastDeliveryOnly.value || (item.prepTimeMinutes || 20) <= 20
     const matchesSearch =
       !query ||
       item.name.toLowerCase().includes(query) ||
       item.description?.toLowerCase().includes(query)
 
-    return matchesCategory && matchesSearch
+    return matchesCategory && matchesSearch && matchesPrice && matchesTopRated && matchesFastDelivery
   })
 
   return [...result].sort((a, b) => {
     if (sort.value === 'price-asc') return a.price - b.price
     if (sort.value === 'price-desc') return b.price - a.price
     if (sort.value === 'az') return a.name.localeCompare(b.name)
+    if (sort.value === 'rating') return a.name.localeCompare(b.name)
     return 0
   })
 })
+
+const formatPrice = (price) => {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + " so'm"
+}
 </script>
 
 <template>
@@ -98,15 +109,16 @@ const filteredFoods = computed(() => {
             <option value="price-asc">Narx: arzon</option>
             <option value="price-desc">Narx: qimmat</option>
             <option value="az">A-Z</option>
+            <option value="rating">Rating</option>
           </select>
         </div>
       </div>
     </div>
 
-    <div class="-mx-3 overflow-x-auto px-3 sm:mx-0 sm:px-0">
-      <div class="flex min-w-max gap-2">
+    <div class="sticky top-[72px] z-30 -mx-3 border-y border-white/70 bg-white/80 px-3 py-3 backdrop-blur-xl dark:border-slate-700/70 dark:bg-slate-900/80 sm:top-[74px] sm:mx-0 sm:rounded-[28px] sm:border sm:px-4">
+      <div class="hide-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-2">
         <button
-          class="rounded-2xl px-5 py-3 text-sm font-black transition"
+          class="shrink-0 rounded-2xl px-5 py-3 text-sm font-black transition"
           :class="activeCategory === 'all'
             ? 'bg-slate-900 text-white dark:bg-orange-500'
             : 'bg-white text-slate-600 shadow-sm hover:bg-orange-50 dark:bg-slate-800 dark:text-slate-300'"
@@ -117,13 +129,37 @@ const filteredFoods = computed(() => {
         <button
           v-for="category in categories"
           :key="category.id"
-          class="rounded-2xl px-5 py-3 text-sm font-black transition"
+          class="shrink-0 rounded-2xl px-5 py-3 text-sm font-black transition"
           :class="activeCategory.toLowerCase() === category.name.toLowerCase()
             ? 'bg-slate-900 text-white dark:bg-orange-500'
             : 'bg-white text-slate-600 shadow-sm hover:bg-orange-50 dark:bg-slate-800 dark:text-slate-300'"
           @click="setCategory(category.name)"
         >
           {{ category.name }}
+        </button>
+      </div>
+
+      <div class="grid gap-3 pt-2 md:grid-cols-[1fr_auto_auto] md:items-center">
+        <label class="rounded-2xl bg-white p-3 shadow-sm dark:bg-slate-800">
+          <div class="mb-2 flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-400">
+            <span>Max narx</span>
+            <span class="text-orange-500">{{ formatPrice(maxPrice) }}</span>
+          </div>
+          <input v-model="maxPrice" type="range" min="10000" max="300000" step="5000" class="w-full accent-orange-500" />
+        </label>
+        <button
+          class="rounded-2xl px-4 py-3 text-sm font-black transition"
+          :class="topRatedOnly ? 'bg-orange-500 text-white' : 'bg-white text-slate-600 shadow-sm dark:bg-slate-800 dark:text-slate-300'"
+          @click="topRatedOnly = !topRatedOnly"
+        >
+          ★ Top rated
+        </button>
+        <button
+          class="rounded-2xl px-4 py-3 text-sm font-black transition"
+          :class="fastDeliveryOnly ? 'bg-orange-500 text-white' : 'bg-white text-slate-600 shadow-sm dark:bg-slate-800 dark:text-slate-300'"
+          @click="fastDeliveryOnly = !fastDeliveryOnly"
+        >
+          15-20 min
         </button>
       </div>
     </div>

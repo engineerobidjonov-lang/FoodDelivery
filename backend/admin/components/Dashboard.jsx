@@ -1,6 +1,8 @@
-import React from 'react'
-import { Box, Button, H1, H2, Icon, Text } from '@adminjs/design-system'
+import React, { useEffect, useState } from 'react'
+import { ApiClient, Box, Button, H1, H2, Icon, Text } from 'adminjs'
 import { useSelector } from 'react-redux'
+
+const api = new ApiClient()
 
 const resourceMeta = {
   User: { label: 'Customers', icon: 'User', color: '#2563eb' },
@@ -12,113 +14,138 @@ const resourceMeta = {
   Address: { label: 'Addresses', icon: 'MapPin', color: '#4b5563' },
 }
 
+const formatPrice = (value = 0) =>
+  `${Number(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} so'm`
+
 const styles = {
-  page: {
-    minHeight: '100%',
-    background: '#f6f7fb',
-    padding: '32px',
-  },
+  page: { minHeight: '100%', background: '#f6f7fb', padding: 32 },
   hero: {
     background: 'linear-gradient(135deg, #111827 0%, #1f2937 55%, #f97316 100%)',
-    borderRadius: '8px',
-    color: '#ffffff',
-    padding: '34px',
-    marginBottom: '24px',
+    borderRadius: 14,
+    color: '#fff',
+    padding: 34,
+    marginBottom: 24,
     display: 'grid',
     gridTemplateColumns: 'minmax(0, 1fr) auto',
-    gap: '24px',
+    gap: 24,
     alignItems: 'center',
-  },
-  heroActions: {
-    display: 'flex',
-    gap: '12px',
-    flexWrap: 'wrap',
   },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-    gap: '16px',
-    marginBottom: '24px',
+    gap: 16,
+    marginBottom: 24,
   },
   card: {
-    background: '#ffffff',
+    background: '#fff',
     border: '1px solid #e5e7eb',
-    borderRadius: '8px',
-    padding: '18px',
-    boxShadow: '0 8px 24px rgba(17, 24, 39, 0.06)',
-  },
-  iconBox: {
-    width: '42px',
-    height: '42px',
-    borderRadius: '8px',
-    display: 'grid',
-    placeItems: 'center',
-    color: '#ffffff',
-    marginBottom: '14px',
+    borderRadius: 14,
+    padding: 18,
+    boxShadow: '0 14px 34px rgba(17, 24, 39, 0.07)',
   },
   panel: {
-    background: '#ffffff',
+    background: '#fff',
     border: '1px solid #e5e7eb',
-    borderRadius: '8px',
-    padding: '22px',
+    borderRadius: 14,
+    padding: 22,
   },
-  quickLinks: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-    gap: '12px',
-    marginTop: '16px',
-  },
-  link: {
-    border: '1px solid #e5e7eb',
-    borderRadius: '8px',
-    padding: '14px',
-    textDecoration: 'none',
-    color: '#111827',
-    background: '#ffffff',
+  row: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: 14,
+    padding: '12px 0',
+    borderBottom: '1px solid #f1f5f9',
   },
 }
 
 const Dashboard = () => {
+  const [stats, setStats] = useState({
+    totalFoods: 0,
+    totalOrders: 0,
+    revenue: 0,
+    popularFoods: [],
+    latestOrders: [],
+  })
+
   const resourcesState = useSelector((state) => state.resources || [])
   const resources = Array.isArray(resourcesState)
     ? resourcesState
     : Object.values(resourcesState || {})
   const visibleResources = resources.filter((resource) => resource?.href)
 
+  useEffect(() => {
+    api.getDashboard().then((response) => {
+      setStats(response.data || {})
+    })
+  }, [])
+
   return (
     <Box style={styles.page}>
       <Box style={styles.hero}>
         <Box>
-          <Text style={{ color: '#fed7aa', fontWeight: 700, marginBottom: 8 }}>
+          <Text style={{ color: '#fed7aa', fontWeight: 800, marginBottom: 8 }}>
             Food Dash Operations
           </Text>
-          <H1 style={{ color: '#ffffff', margin: 0 }}>Admin Control Center</H1>
+          <H1 style={{ color: '#fff', margin: 0 }}>Admin Control Center</H1>
           <Text style={{ color: '#f3f4f6', maxWidth: 620, marginTop: 12 }}>
-            Manage menu items, categories, sellers, orders, couriers, customers, and saved addresses from one focused workspace.
+            Track menu health, orders, revenue, and catalog activity from one focused workspace.
           </Text>
         </Box>
-        <Box style={styles.heroActions}>
-          <Button as="a" href="/admin/resources/Food/actions/new" variant="primary">
-            Add food
-          </Button>
-          <Button as="a" href="/admin/resources/Order" variant="light">
-            View orders
-          </Button>
+        <Box style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Button as="a" href="/admin/resources/Food/actions/new" variant="primary">Add food</Button>
+          <Button as="a" href="/admin/resources/Order" variant="light">View orders</Button>
+        </Box>
+      </Box>
+
+      <Box style={styles.grid}>
+        {[
+          ['Total foods', stats.totalFoods, 'ShoppingBag', '#f97316'],
+          ['Total orders', stats.totalOrders, 'ShoppingCart', '#9333ea'],
+          ['Revenue', formatPrice(stats.revenue), 'DollarSign', '#16a34a'],
+          ['Popular foods', stats.popularFoods?.length || 0, 'Star', '#0891b2'],
+        ].map(([label, value, icon, color]) => (
+          <Box key={label} style={styles.card}>
+            <Box style={{ width: 42, height: 42, borderRadius: 10, display: 'grid', placeItems: 'center', background: color, color: '#fff', marginBottom: 14 }}>
+              <Icon icon={icon} color="white" />
+            </Box>
+            <Text style={{ color: '#64748b', fontWeight: 700 }}>{label}</Text>
+            <H2 style={{ margin: 0, color: '#111827' }}>{value}</H2>
+          </Box>
+        ))}
+      </Box>
+
+      <Box style={{ ...styles.grid, gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
+        <Box style={styles.panel}>
+          <H2 style={{ marginTop: 0 }}>Popular foods</H2>
+          {(stats.popularFoods || []).map((food) => (
+            <Box key={food.name} style={styles.row}>
+              <Text fontWeight="bold">{food.name}</Text>
+              <Text color="grey60">{formatPrice(food.price)}</Text>
+            </Box>
+          ))}
+        </Box>
+
+        <Box style={styles.panel}>
+          <H2 style={{ marginTop: 0 }}>Latest orders</H2>
+          {(stats.latestOrders || []).map((order) => (
+            <Box key={order.id} style={styles.row}>
+              <Box>
+                <Text fontWeight="bold">#{order.id}</Text>
+                <Text color="grey60">{order.status}</Text>
+              </Box>
+              <Text fontWeight="bold">{formatPrice(order.totalPrice)}</Text>
+            </Box>
+          ))}
         </Box>
       </Box>
 
       <Box style={styles.grid}>
         {visibleResources.map((resource) => {
-          const meta = resourceMeta[resource.id] || {
-            label: resource.name || resource.id,
-            icon: 'Database',
-            color: '#6b7280',
-          }
-
+          const meta = resourceMeta[resource.id] || { label: resource.name || resource.id, icon: 'Database', color: '#6b7280' }
           return (
             <a key={resource.id} href={resource.href} style={{ textDecoration: 'none' }}>
               <Box style={styles.card}>
-                <Box style={{ ...styles.iconBox, background: meta.color }}>
+                <Box style={{ width: 42, height: 42, borderRadius: 10, display: 'grid', placeItems: 'center', background: meta.color, marginBottom: 14 }}>
                   <Icon icon={meta.icon} color="white" />
                 </Box>
                 <H2 style={{ margin: 0, color: '#111827' }}>{meta.label}</H2>
@@ -127,31 +154,6 @@ const Dashboard = () => {
             </a>
           )
         })}
-      </Box>
-
-      <Box style={styles.panel}>
-        <H2 style={{ marginTop: 0 }}>Common Workflows</H2>
-        <Text style={{ color: '#6b7280' }}>
-          Use these shortcuts for the admin tasks you will repeat most often.
-        </Text>
-        <Box style={styles.quickLinks}>
-          <a href="/admin/resources/Food/actions/new" style={styles.link}>
-            <Text fontWeight="bold">Create food item</Text>
-            <Text color="grey60">Upload a photo, set price, and assign category.</Text>
-          </a>
-          <a href="/admin/resources/Category/actions/new" style={styles.link}>
-            <Text fontWeight="bold">Add category</Text>
-            <Text color="grey60">Create banners and menu groups.</Text>
-          </a>
-          <a href="/admin/resources/Order" style={styles.link}>
-            <Text fontWeight="bold">Review orders</Text>
-            <Text color="grey60">Track customer orders and statuses.</Text>
-          </a>
-          <a href="/admin/resources/DeliveryPerson/actions/new" style={styles.link}>
-            <Text fontWeight="bold">Add courier</Text>
-            <Text color="grey60">Manage delivery availability.</Text>
-          </a>
-        </Box>
       </Box>
     </Box>
   )

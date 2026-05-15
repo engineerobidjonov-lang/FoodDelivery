@@ -7,6 +7,7 @@ export const useCartStore = defineStore('cart', () => {
   
   const items = ref(JSON.parse(localStorage.getItem('cart_items')) || [])
   const address = ref('')
+  const lastAddedAt = ref(0)
 
   watch(items, (newItems) => {
     localStorage.setItem('cart_items', JSON.stringify(newItems))
@@ -25,11 +26,13 @@ export const useCartStore = defineStore('cart', () => {
 
     if (existingItem) {
       existingItem.quantity += 1
+      lastAddedAt.value = Date.now()
       notificationStore.addNotification(`${food.name} soni oshirildi`)
       return
     }
 
     items.value.push({ ...food, quantity: 1 })
+    lastAddedAt.value = Date.now()
     notificationStore.addNotification(`${food.name} savatga qo'shildi`)
   }
 
@@ -65,6 +68,7 @@ export const useCartStore = defineStore('cart', () => {
     address,
     itemCount,
     totalPrice,
+    lastAddedAt,
     addToCart,
     updateQuantity,
     removeFromCart,

@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { RouterLink, useRoute } from 'vue-router'
 import { useCartStore } from '@/store/cart'
@@ -7,6 +7,7 @@ import { useCartStore } from '@/store/cart'
 const route = useRoute()
 const cartStore = useCartStore()
 const { itemCount } = storeToRefs(cartStore)
+const cartPulse = ref(false)
 
 const items = [
   { label: 'Home', path: '/', icon: '⌂' },
@@ -19,6 +20,14 @@ const items = [
 const isActive = computed(() => (path) => {
   if (path === '/') return route.path === '/'
   return route.path === path || route.path.startsWith(`${path}/`)
+})
+
+watch(() => cartStore.lastAddedAt, () => {
+  if (!cartStore.lastAddedAt) return
+  cartPulse.value = true
+  window.setTimeout(() => {
+    cartPulse.value = false
+  }, 650)
 })
 </script>
 
@@ -39,6 +48,7 @@ const isActive = computed(() => (path) => {
         <span
           v-if="item.path === '/cart' && itemCount > 0"
           class="absolute right-1 top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-slate-900 px-1 text-[10px] text-white dark:bg-orange-500"
+          :class="cartPulse ? 'animate-cart-bounce' : ''"
         >
           {{ itemCount }}
         </span>

@@ -15,6 +15,7 @@ const cartStore = useCartStore()
 const favoriteStore = useFavoriteStore()
 
 const isDetailOpen = ref(false)
+const isAdding = ref(false)
 const fallbackImage = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80'
 
 const getImage = (item) => item.imageUrl || item.image || fallbackImage
@@ -39,6 +40,13 @@ const closeDetails = () => {
 
 const handleAddToCart = () => {
   cartStore.addToCart(props.item)
+  isAdding.value = true
+  if ('vibrate' in navigator) {
+    navigator.vibrate(18)
+  }
+  window.setTimeout(() => {
+    isAdding.value = false
+  }, 600)
 }
 </script>
 
@@ -62,6 +70,14 @@ const handleAddToCart = () => {
         <span class="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-slate-700 shadow-sm backdrop-blur dark:bg-slate-900/85 dark:text-slate-200">
           {{ item.category }}
         </span>
+        <div class="absolute bottom-4 left-4 flex gap-2">
+          <span class="rounded-full bg-slate-950/80 px-3 py-1 text-xs font-black text-white backdrop-blur">
+            ★ 4.8
+          </span>
+          <span class="rounded-full bg-white/90 px-3 py-1 text-xs font-black text-slate-800 backdrop-blur dark:bg-slate-900/85 dark:text-slate-100">
+            15-20 min
+          </span>
+        </div>
         
         <!-- Like Button -->
         <button 
@@ -93,6 +109,7 @@ const handleAddToCart = () => {
           <button 
             @click.stop="handleAddToCart"
             class="flex h-12 shrink-0 items-center justify-center rounded-2xl bg-orange-500 px-4 text-sm font-black text-white shadow-lg shadow-orange-500/20 transition-all hover:bg-slate-900 active:scale-95 dark:hover:bg-orange-600"
+            :class="isAdding ? 'animate-cart-bounce' : ''"
           >
             <span class="text-xl">🛒</span>
           </button>
