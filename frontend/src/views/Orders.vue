@@ -159,7 +159,7 @@ const handleDeleteOrder = (order) => {
               </div>
             </div>
             
-            <div class="flex flex-col items-end">
+            <div class="flex flex-col items-start sm:items-end">
               <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Sana</p>
               <p class="font-bold text-slate-700 dark:text-slate-300">{{ formatDate(order.createdAt) }}</p>
             </div>
@@ -179,7 +179,7 @@ const handleDeleteOrder = (order) => {
 
           <!-- Quick Info & Actions -->
           <div class="flex flex-wrap items-center justify-between gap-6 pt-6 border-t border-gray-100 dark:border-slate-700">
-            <div class="flex gap-8">
+            <div class="flex w-full flex-col gap-6 sm:w-auto sm:flex-row sm:gap-8">
               <div>
                 <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Taomlar</p>
                 <p class="font-black text-slate-900 dark:text-slate-100">{{ order.items.length }} ta</p>
@@ -190,22 +190,22 @@ const handleDeleteOrder = (order) => {
               </div>
             </div>
 
-            <div class="flex gap-4">
+            <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
               <button 
                 @click="handleReorder(order)"
-                class="px-8 py-4 rounded-2xl bg-slate-900 dark:bg-orange-600 text-white font-black hover:bg-orange-500 transition-all active:scale-95 shadow-lg"
+                class="w-full rounded-2xl bg-slate-900 px-5 py-4 font-black text-white shadow-lg transition-all hover:bg-orange-500 active:scale-95 dark:bg-orange-600 sm:w-auto sm:px-8"
               >
                 Qayta buyurtma
               </button>
               <button 
                 @click="openDetails(order)"
-                class="px-8 py-4 rounded-2xl bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-black hover:bg-slate-100 dark:hover:bg-slate-600 transition-all active:scale-95"
+                class="w-full rounded-2xl bg-slate-50 px-5 py-4 font-black text-slate-700 transition-all hover:bg-slate-100 active:scale-95 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600 sm:w-auto sm:px-8"
               >
                 Batafsil
               </button>
               <button
                 @click="handleDeleteOrder(order)"
-                class="px-8 py-4 rounded-2xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-300 font-black hover:bg-red-100 dark:hover:bg-red-900/30 transition-all active:scale-95"
+                class="w-full rounded-2xl bg-red-50 px-5 py-4 font-black text-red-600 transition-all hover:bg-red-100 active:scale-95 dark:bg-red-900/20 dark:text-red-300 dark:hover:bg-red-900/30 sm:w-auto sm:px-8"
               >
                 O‘chirish
               </button>

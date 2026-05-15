@@ -25,39 +25,39 @@ const handleImageError = (event) => {
 </script>
 
 <template>
-  <article class="flex flex-col gap-6 rounded-[32px] bg-white p-6 shadow-float sm:flex-row sm:items-center">
+  <article class="flex flex-col gap-6 rounded-[32px] bg-white p-5 shadow-float dark:border dark:border-slate-700 dark:bg-slate-800 sm:flex-row sm:items-center sm:p-6">
     <!-- Image -->
-    <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl">
+    <div class="mx-auto h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl sm:mx-0">
       <img :src="getImage(item)" :alt="item.name" @error="handleImageError" class="h-full w-full object-cover" />
     </div>
 
     <!-- Info -->
     <div class="min-w-0 flex-1">
-      <h3 class="text-xl font-black text-slate-900 line-clamp-1">{{ item.name }}</h3>
+      <h3 class="text-xl font-black text-slate-900 line-clamp-1 dark:text-slate-100">{{ item.name }}</h3>
       <p class="mt-1 text-sm font-bold text-orange-500">{{ formatPrice(item.price) }}</p>
     </div>
 
     <!-- Actions -->
-    <div class="flex items-center justify-between gap-6">
-      <div class="flex items-center gap-4 rounded-2xl bg-gray-50 p-2">
+    <div class="flex w-full flex-wrap items-center justify-between gap-4 sm:w-auto sm:flex-nowrap sm:gap-6">
+      <div class="flex items-center gap-3 rounded-2xl bg-gray-50 p-2 dark:bg-slate-900 sm:gap-4">
         <button 
           @click="cartStore.updateQuantity(item.id, item.quantity - 1)"
-          class="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-xl font-bold shadow-sm transition hover:bg-orange-500 hover:text-white"
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-xl font-bold shadow-sm transition hover:bg-orange-500 hover:text-white dark:bg-slate-800 dark:text-slate-100"
         >
           -
         </button>
-        <span class="w-8 text-center font-black text-slate-900">{{ item.quantity }}</span>
+        <span class="w-8 text-center font-black text-slate-900 dark:text-slate-100">{{ item.quantity }}</span>
         <button 
           @click="cartStore.updateQuantity(item.id, item.quantity + 1)"
-          class="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-xl font-bold shadow-sm transition hover:bg-orange-500 hover:text-white"
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-xl font-bold shadow-sm transition hover:bg-orange-500 hover:text-white dark:bg-slate-800 dark:text-slate-100"
         >
           +
         </button>
       </div>
 
-      <div class="flex flex-col items-end min-w-[120px]">
+      <div class="flex min-w-0 flex-col items-end">
         <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Jami</span>
-        <p class="text-lg font-black text-slate-900">{{ formatPrice(item.price * item.quantity) }}</p>
+        <p class="text-lg font-black text-slate-900 dark:text-slate-100">{{ formatPrice(item.price * item.quantity) }}</p>
       </div>
 
       <button 

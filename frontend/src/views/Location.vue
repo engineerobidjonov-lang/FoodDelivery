@@ -161,7 +161,7 @@ const backToHome = () => {
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <button 
           @click="callCourier"
           class="bg-white dark:bg-slate-800 border-2 border-gray-100 dark:border-slate-700 text-slate-900 dark:text-white py-5 rounded-[24px] font-black text-lg flex items-center justify-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm"

@@ -36,7 +36,7 @@ const getCategoryIcon = (name) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-white dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300">
+  <div class="min-h-screen overflow-x-hidden bg-white dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300">
     <Navbar />
 
     <!-- Cart Drawer -->
@@ -54,7 +54,7 @@ const getCategoryIcon = (name) => {
 
     <!-- Sidebar -->
     <aside
-      class="fixed left-0 top-0 z-[70] h-full w-80 transform bg-white dark:bg-slate-900 shadow-2xl transition-transform duration-300 ease-in-out border-r border-gray-100 dark:border-slate-800"
+      class="fixed left-0 top-0 z-[70] h-full w-[min(20rem,calc(100vw-1rem))] transform bg-white dark:bg-slate-900 shadow-2xl transition-transform duration-300 ease-in-out border-r border-gray-100 dark:border-slate-800"
       :class="isSidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <div class="flex h-full flex-col p-6">
@@ -107,7 +107,7 @@ const getCategoryIcon = (name) => {
       </div>
     </aside>
 
-    <main class="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8">
+    <main class="mx-auto w-full max-w-7xl px-3 pb-12 pt-6 sm:px-6 lg:px-8">
       <RouterView />
     </main>
   </div>

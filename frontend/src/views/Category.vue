@@ -31,16 +31,16 @@ const formatPrice = (price) => {
 </script>
 
 <template>
-  <section class="space-y-12 pb-24">
+  <section class="space-y-10 overflow-x-hidden pb-24 sm:space-y-12">
     <!-- Category Hero -->
-    <div class="overflow-hidden rounded-[40px] bg-white dark:bg-slate-800 shadow-float border border-gray-100 dark:border-slate-700 transition-colors">
+    <div class="overflow-hidden rounded-[28px] bg-white dark:bg-slate-800 shadow-float border border-gray-100 dark:border-slate-700 transition-colors sm:rounded-[40px]">
       <div class="grid lg:grid-cols-[1fr_1fr]">
-        <div class="flex flex-col justify-center p-12 lg:p-16">
+        <div class="flex flex-col justify-center p-6 sm:p-10 lg:p-16">
           <p class="text-sm font-bold uppercase tracking-[0.3em] text-orange-500 mb-4">
             Restoran Menu
           </p>
 
-          <h1 class="text-5xl font-black text-slate-900 dark:text-slate-100 mb-6">
+          <h1 class="break-words text-4xl font-black text-slate-900 dark:text-slate-100 mb-6 sm:text-5xl">
             {{ currentCategory?.name || route.params.name }}
           </h1>
 
@@ -51,7 +51,7 @@ const formatPrice = (price) => {
             }}
           </p>
 
-          <div class="grid gap-6 md:grid-cols-2">
+          <div class="grid gap-4 md:grid-cols-2 md:gap-6">
             <div class="relative group">
               <input
                 v-model="search"
@@ -100,7 +100,7 @@ const formatPrice = (price) => {
           </div>
         </div>
 
-        <div class="relative min-h-[400px]">
+        <div class="relative min-h-[260px] sm:min-h-[340px] lg:min-h-[400px]">
           <img
             :src="
               currentCategory?.banner ||
@@ -118,7 +118,7 @@ const formatPrice = (price) => {
     </div>
 
     <!-- Results Info -->
-    <div class="flex items-center justify-between px-2">
+    <div class="flex flex-col items-start justify-between gap-3 px-2 sm:flex-row sm:items-center">
       <div class="flex items-center gap-3">
         <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
 

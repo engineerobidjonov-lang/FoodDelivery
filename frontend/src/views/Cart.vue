@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useCartStore } from '@/store/cart'
 import { useNotificationStore } from '@/store/notification'
-import { orderService } from '@/services/orderService'
 import CartItem from '@/components/CartItem.vue'
 
 const router = useRouter()
@@ -32,7 +31,7 @@ const checkout = async () => {
 <template>
   <div class="min-h-screen bg-[#FDFDFD] dark:bg-slate-900 py-8 transition-colors">
     <div class="max-w-5xl mx-auto px-4">
-      <div class="mb-10 flex items-center justify-between">
+      <div class="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 class="text-4xl font-black text-gray-900">Savat 🛒</h1>
           <p class="text-gray-500 mt-2">Siz tanlagan barcha shirinliklar va taomlar</p>
@@ -54,8 +53,8 @@ const checkout = async () => {
 
         <!-- Summary -->
         <div class="sticky top-24 h-fit">
-          <div class="rounded-[32px] bg-white p-8 shadow-float border border-gray-50">
-            <h2 class="text-2xl font-black text-gray-900 mb-6">Jami</h2>
+          <div class="rounded-[32px] bg-white p-8 shadow-float border border-gray-50 dark:border-slate-700 dark:bg-slate-800">
+            <h2 class="text-2xl font-black text-gray-900 mb-6 dark:text-slate-100">Jami</h2>
             
             <div class="space-y-4 mb-8">
               <div class="flex justify-between text-gray-500 font-medium">
@@ -66,9 +65,9 @@ const checkout = async () => {
                 <span>Yetkazib berish:</span>
                 <span class="text-green-500 font-bold">Bepul</span>
               </div>
-              <div class="h-px bg-gray-100 my-4"></div>
+              <div class="h-px bg-gray-100 my-4 dark:bg-slate-700"></div>
               <div class="flex justify-between items-end">
-                <span class="text-lg font-bold text-gray-900">Umumiy:</span>
+                <span class="text-lg font-bold text-gray-900 dark:text-slate-100">Umumiy:</span>
                 <span class="text-2xl font-black text-orange-500">{{ formatPrice(totalPrice) }}</span>
               </div>
             </div>
@@ -94,7 +93,7 @@ const checkout = async () => {
       </div>
 
       <!-- Empty Cart -->
-      <div v-else class="text-center py-20 bg-white rounded-[40px] shadow-float border border-gray-50">
+      <div v-else class="text-center py-20 bg-white rounded-[40px] shadow-float border border-gray-50 dark:border-slate-700 dark:bg-slate-800">
         <div class="text-8xl mb-6">🛒</div>
         <h2 class="text-3xl font-black text-gray-900">Savat bo‘sh</h2>
         <p class="text-gray-500 mt-3 max-w-sm mx-auto">Siz hali birorta ham taom tanlamadingiz. Home pagega o‘tib, mazali taomlar tanlang!</p>

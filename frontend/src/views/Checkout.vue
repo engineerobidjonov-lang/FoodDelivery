@@ -185,9 +185,9 @@ const handleSubmit = async () => {
                 <p class="font-black">Savat bo‘sh</p>
                 <p class="text-sm text-white/50 mt-1">Avval ovqat tanlang.</p>
               </div>
-              <div v-for="item in items" :key="item.id" class="flex justify-between text-sm opacity-80">
-                <span>{{ item.quantity }}x {{ item.name }}</span>
-                <span>{{ formatPrice(item.price * item.quantity) }}</span>
+              <div v-for="item in items" :key="item.id" class="flex justify-between gap-3 text-sm opacity-80">
+                <span class="min-w-0 break-words">{{ item.quantity }}x {{ item.name }}</span>
+                <span class="shrink-0">{{ formatPrice(item.price * item.quantity) }}</span>
               </div>
               <div class="h-px bg-white/10 my-6"></div>
               <div class="flex justify-between items-end">

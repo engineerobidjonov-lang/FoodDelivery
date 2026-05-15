@@ -8,7 +8,7 @@ const { notifications } = storeToRefs(notificationStore)
 
 <template>
   <Teleport to="body">
-    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[200] flex flex-col items-center gap-3 pointer-events-none">
+    <div class="fixed bottom-8 left-1/2 z-[200] flex w-full -translate-x-1/2 flex-col items-center gap-3 px-4 pointer-events-none">
       <transition-group 
         enter-active-class="transition duration-300 ease-out"
         enter-from-class="opacity-0 translate-y-4 scale-95"
@@ -20,7 +20,7 @@ const { notifications } = storeToRefs(notificationStore)
         <div 
           v-for="notif in notifications" 
           :key="notif.id"
-          class="pointer-events-auto flex items-center gap-3 px-6 py-4 rounded-[20px] shadow-2xl backdrop-blur-md border min-w-[300px]"
+          class="pointer-events-auto flex w-full max-w-[calc(100vw-2rem)] items-center gap-3 rounded-[20px] border px-5 py-4 shadow-2xl backdrop-blur-md sm:w-auto sm:min-w-[300px] sm:px-6"
           :class="{
             'bg-slate-900/90 text-white border-white/10': notif.type === 'success',
             'bg-red-500/90 text-white border-red-400/20': notif.type === 'error',

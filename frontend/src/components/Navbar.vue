@@ -24,7 +24,7 @@ const links = [
 
 <template>
   <header class="sticky top-0 z-40 border-b border-gray-100 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl transition-colors">
-    <nav class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+    <nav class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-3 py-3 sm:flex-nowrap sm:gap-3 sm:px-6 lg:px-8">
       
       <!-- Logo -->
       <RouterLink to="/" class="flex items-center gap-3">
@@ -36,12 +36,12 @@ const links = [
       </RouterLink>
 
       <!-- Navigation Links -->
-      <div class="flex items-center gap-1 sm:gap-2 rounded-full border border-gray-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-1">
+      <div class="order-3 flex w-full items-center gap-1 overflow-x-auto rounded-full border border-gray-100 bg-slate-50 p-1 dark:border-slate-700 dark:bg-slate-800 sm:order-none sm:w-auto sm:overflow-visible sm:gap-2">
         <RouterLink
           v-for="link in links"
           :key="link.path"
           :to="link.path"
-          class="rounded-full px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-bold transition-all"
+          class="shrink-0 rounded-full px-3 py-1.5 text-xs font-bold transition-all sm:px-4 sm:text-sm"
           :class="route.path === link.path 
             ? 'bg-white dark:bg-slate-700 text-orange-600 dark:text-orange-400 shadow-sm' 
             : 'text-slate-700 dark:text-slate-300 hover:text-orange-500 dark:hover:text-orange-300'"
@@ -51,7 +51,7 @@ const links = [
       </div>
 
       <!-- Right side actions -->
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex min-w-0 items-center gap-2 sm:gap-3">
         
         <!-- Theme Toggle -->
         <button 
@@ -83,7 +83,7 @@ const links = [
           <template v-else>
             <RouterLink 
               to="/login"
-              class="flex h-10 px-4 items-center justify-center rounded-xl bg-orange-500 text-white text-xs font-black uppercase tracking-widest shadow-lg shadow-orange-100 hover:bg-orange-600 transition-all active:scale-95"
+              class="flex h-10 items-center justify-center rounded-xl bg-orange-500 px-3 text-xs font-black uppercase tracking-widest text-white shadow-lg shadow-orange-100 transition-all hover:bg-orange-600 active:scale-95 sm:px-4"
             >
               Kirish
             </RouterLink>
@@ -93,7 +93,7 @@ const links = [
         <!-- Cart Button -->
         <button 
           @click="uiStore.openCart"
-          class="relative group flex h-10 px-3 sm:px-4 items-center justify-center rounded-xl bg-slate-900 dark:bg-slate-800 text-white shadow-lg transition-all hover:bg-orange-500" 
+          class="relative group flex h-10 shrink-0 items-center justify-center rounded-xl bg-slate-900 px-3 text-white shadow-lg transition-all hover:bg-orange-500 dark:bg-slate-800 sm:px-4" 
           aria-label="Open Cart"
         >
           <span class="text-xl sm:mr-2">🛒</span>

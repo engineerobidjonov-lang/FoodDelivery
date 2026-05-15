@@ -60,20 +60,20 @@ const callRestaurant = (phone) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-white dark:bg-slate-900 pb-24 -mt-6 transition-colors">
+  <div class="min-h-screen overflow-x-hidden bg-white dark:bg-slate-900 pb-24 -mt-6 transition-colors">
     <!-- Sub Header with Menu and Welcome -->
-    <div class="bg-white dark:bg-slate-800 px-4 py-6 border-b border-gray-100 dark:border-slate-700 rounded-b-[40px] shadow-sm">
-      <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <div class="flex items-center gap-4">
+    <div class="bg-white dark:bg-slate-800 px-3 py-5 sm:px-4 sm:py-6 border-b border-gray-100 dark:border-slate-700 rounded-b-[32px] sm:rounded-b-[40px] shadow-sm">
+      <div class="max-w-7xl mx-auto flex justify-between items-center gap-3">
+        <div class="flex min-w-0 items-center gap-3 sm:gap-4">
           <button 
             @click="uiStore.openSidebar" 
             class="h-12 w-12 flex items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-700 text-2xl hover:bg-orange-50 dark:hover:bg-slate-600 transition-colors"
           >
             ☰
           </button>
-          <div>
+          <div class="min-w-0">
             <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Xayrli kun!</p>
-            <h1 class="text-xl font-black text-slate-900 dark:text-slate-100">
+            <h1 class="truncate text-lg sm:text-xl font-black text-slate-900 dark:text-slate-100">
               Xush Keldingiz, <span class="text-orange-500">{{ authStore.user?.name || 'Mehmon' }}</span>
             </h1>
           </div>
@@ -87,7 +87,7 @@ const callRestaurant = (phone) => {
       </div>
     </div>
 
-    <main class="max-w-7xl mx-auto px-4 mt-8">
+    <main class="max-w-7xl mx-auto px-1 sm:px-4 mt-8">
       <!-- Search Bar -->
       <div class="relative mb-10 group max-w-2xl mx-auto">
         <div class="absolute left-6 top-1/2 -translate-y-1/2 text-2xl opacity-20 group-focus-within:opacity-100 transition-opacity">
@@ -97,7 +97,7 @@ const callRestaurant = (phone) => {
           v-model="searchQuery"
           type="text"
           placeholder="Qanday taomlarni hush ko‘rasiz?"
-          class="w-full py-6 px-16 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-[30px] shadow-float border-2 border-transparent focus:border-orange-500 focus:ring-0 transition-all font-bold text-lg"
+          class="w-full py-5 sm:py-6 pl-14 pr-12 sm:px-16 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-[24px] sm:rounded-[30px] shadow-float border-2 border-transparent focus:border-orange-500 focus:ring-0 transition-all font-bold text-base sm:text-lg"
         />
         <button 
           v-if="searchQuery"
@@ -110,12 +110,12 @@ const callRestaurant = (phone) => {
 
       <!-- Categories & Foods Grid -->
       <section v-for="category in filteredCategories" :key="category.id" class="mb-12">
-        <div class="flex justify-between items-end mb-6">
-          <div>
-            <h2 class="text-3xl font-black text-slate-900 dark:text-slate-100">{{ category.name }}</h2>
+        <div class="flex justify-between items-end gap-4 mb-6">
+          <div class="min-w-0">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100">{{ category.name }}</h2>
             <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Eng sara {{ category.name.toLowerCase() }} taomlari</p>
           </div>
-          <RouterLink :to="`/category/${category.name}`" class="text-orange-500 font-bold hover:underline flex items-center gap-1">
+          <RouterLink :to="`/category/${category.name}`" class="shrink-0 text-orange-500 font-bold hover:underline flex items-center gap-1">
             Hammasi <span class="text-lg">→</span>
           </RouterLink>
         </div>

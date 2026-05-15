@@ -125,10 +125,10 @@ const handleAddToCart = () => {
             </div>
           </div>
 
-          <div class="mt-8 flex gap-4">
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row">
             <button 
               @click="favoriteStore.toggleLike(item)"
-              class="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 text-2xl shadow-sm transition-all hover:bg-red-50 dark:hover:bg-red-900/20 active:scale-95"
+              class="flex h-16 w-full items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 text-2xl shadow-sm transition-all hover:bg-red-50 dark:hover:bg-red-900/20 active:scale-95 sm:w-16"
             >
               <span :class="favoriteStore.isLiked(item.id) ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'">
                 {{ favoriteStore.isLiked(item.id) ? '❤️' : '🤍' }}
@@ -136,7 +136,7 @@ const handleAddToCart = () => {
             </button>
             <button 
               @click="handleAddToCart"
-              class="flex-1 h-16 rounded-3xl bg-slate-900 dark:bg-orange-600 text-white font-black text-lg shadow-xl shadow-slate-200 dark:shadow-none transition-all hover:bg-orange-500 active:scale-95 flex items-center justify-center gap-3"
+              class="flex h-16 flex-1 items-center justify-center gap-3 rounded-3xl bg-slate-900 dark:bg-orange-600 text-white font-black text-lg shadow-xl shadow-slate-200 dark:shadow-none transition-all hover:bg-orange-500 active:scale-95"
             >
               <span>Savatga qo'shish</span>
               <span class="text-2xl">🛒</span>

@@ -9,6 +9,17 @@ npm install
 npm run dev
 ```
 
+## Environment
+
+For Vercel deployment, set this environment variable:
+
+```text
+VITE_API_URL=https://abdurahmon-food-backend.onrender.com
+```
+
+The app will call backend endpoints as `/api/catalog/categories` and `/api/catalog/foods`.
+Local development can keep `VITE_API_URL` empty and use the Vite `/api` proxy.
+
 ## Available routes
 
 - `/` home page with featured categories
