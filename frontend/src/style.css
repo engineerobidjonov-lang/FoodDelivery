@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color: #1a1a1a;
+    background-color: #fdfdfd;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  html.dark {
+    color: #f1f5f9;
+    background-color: #0f172a;
+  }
+}
+
+@layer components {
+  .shadow-float {
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+  }
+  
+  .dark .shadow-float {
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.4);
+  }
+}
+
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Custom UI Tweaks */
+input:focus {
+  outline: none;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.transition-all {
+  transition-duration: 300ms;
+}
